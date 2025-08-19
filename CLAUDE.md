@@ -65,17 +65,21 @@ Since this is a framework/template repository, there are no traditional build/te
 ## Key File Structure
 
 ```
-.claude/state.json          # Central project state (orchestrator only)
-docs/decisions.md           # Decision log with approval workflow
-docs/requirements.md        # Product requirements
-docs/roadmap.md            # High-level project phases
-docs/contracts.md           # Contract version index
-docs/development.md         # Dev environment setup
+.claude/
+  agents/                   # Subagent definitions (runtime)
+  state.json                # Central project state (orchestrator only)
+
+docs/
+  decisions.md              # Decision log with approval workflow
+  requirements.md           # Product requirements
+  roadmap.md                # High-level project phases
+  contracts.md              # Contract version index
+  development.md            # Dev environment setup
+
 contracts/*.json            # Versioned JSON Schema contracts
 src/                        # Production Python modules
 tests/                      # Automated test suite
-agents/                     # Subagent definitions
-agents-rules/               # Agent-specific behavior rules
+agents-rules/               # Agent-specific behavior rules (template)
 ```
 
 ## Usage Pattern
