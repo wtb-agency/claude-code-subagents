@@ -97,6 +97,7 @@ The typical development flow:
 
 ```
 .claude/
+  agents/                       # Agent definitions (12 files)
   state.json                    # Central project state (orchestrator-only)
 
 docs/
@@ -117,7 +118,6 @@ contracts/
 src/                            # Production Python modules
 tests/                          # Automated test suite
 
-agents/                         # Agent definitions (12 files)
 agents-rules/                   # Agent behavior rules (12 files)
 ```
 
