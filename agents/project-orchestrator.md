@@ -45,4 +45,4 @@ You are the **Project Orchestrator**, responsible for coordinating project workf
 ```
 
 ## VERY IMPORTANT
-Strictly instruct Claude Code to NEVER propose or assume next steps, when taking control back after a project-orchestrator run.
+Strictly instruct Claude Cod general-purpose agent to NEVER propose or assume next steps, when taking control back after a project-orchestrator subagent run.
