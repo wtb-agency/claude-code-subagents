@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a **Claude Code Subagent Framework** that implements strict role-based separation of concerns with human approval workflows. The framework ensures that different aspects of software development (orchestration, requirements, contracts, implementation, testing, documentation, MCP server development) are handled by specialized agents with clear boundaries and mandatory approval gates.
+This is a **Claude Code Subagent Framework** that implements strict role-based separation of concerns with human approval workflows. The framework ensures that different aspects of software development (orchestration, requirements, contracts, implementation, testing, documentation, MCP server development, DXT extension development) are handled by specialized agents with clear boundaries and mandatory approval gates.
 
 ## Core Architecture
 
@@ -39,6 +39,14 @@ This is a **Claude Code Subagent Framework** that implements strict role-based s
 - `mcp-client-integration-manager`: Client configurations and integration guides
 - `mcp-test-engineer`: MCP-specific testing and protocol validation
 
+**DXT Extension Development:**
+- `dxt-manifest-manager`: Claude Desktop extension manifest.json files and metadata
+- `dxt-config-manager`: User configuration schemas and secure data handling patterns
+- `dxt-extension-engineer`: Claude Desktop extension implementation and MCP integration
+- `dxt-dependency-bundler`: Python venv/lib, Node.js node_modules, and binary dependency bundling
+- `dxt-packager`: .dxt package creation using official DXT toolchain
+- `dxt-installer-tester`: Installation testing and Claude Desktop integration validation
+
 **Quality & Documentation:**
 - `documentation-maintainer`: Formatting, cross-references, consistency (no content creation)
 - `improvements-manager`: Enhancement suggestions and optimization recommendations
@@ -57,6 +65,12 @@ This is a **Claude Code Subagent Framework** that implements strict role-based s
 - **Only `mcp-protocol-manager`** can edit `contracts/mcp/**` (general protocols)
 - **Only `mcp-client-integration-manager`** can edit `configs/mcp-clients/**`
 - **Only `mcp-test-engineer`** can edit `tests/mcp/**`
+- **Only `dxt-manifest-manager`** can edit `configs/dxt/**`
+- **Only `dxt-config-manager`** can edit `contracts/dxt/config/**`
+- **Only `dxt-extension-engineer`** can edit `src/dxt/**`
+- **Only `dxt-dependency-bundler`** can edit `deps/dxt/**`
+- **Only `dxt-packager`** can edit `dist/dxt/**`
+- **Only `dxt-installer-tester`** can edit `tests/dxt/**`
 
 ### Approval Workflow
 1. Agent performs its specialized task
@@ -90,6 +104,7 @@ docs/
   contracts.md              # Contract version index
   mcp-contracts.md          # MCP protocol version index
   mcp-integration/          # MCP client integration guides
+  dxt-manifests.md          # DXT extension manifest index
   development.md            # Dev environment setup
 
 contracts/
@@ -97,18 +112,29 @@ contracts/
   mcp/                      # MCP protocol and capability contracts
     tools/                  # MCP tool schemas
     resources/              # MCP resource schemas
+  dxt/                      # DXT extension contracts
+    config/                 # Configuration schemas and security patterns
 
 configs/
   mcp-clients/              # Client-specific MCP configurations
+  dxt/                      # DXT extension manifests and metadata
+
+deps/
+  dxt/                      # DXT extension dependency bundles
+
+dist/
+  dxt/                      # Generated .dxt extension packages
 
 src/                        # Production Python modules
   mcp/                      # MCP server implementation
     server/                 # Core server runtime
     tools/                  # Tool handlers
     resources/              # Resource providers
+  dxt/                      # DXT extension implementations
 
 tests/                      # Automated test suite
   mcp/                      # MCP-specific tests
+  dxt/                      # DXT extension tests
 
 agents-rules/               # Agent-specific behavior rules (template)
 ```
@@ -171,6 +197,30 @@ Agent: mcp-client-integration-manager
 # MCP Testing
 Task: "Write MCP protocol compliance tests"
 Agent: mcp-test-engineer
+
+# DXT Extension Manifest
+Task: "Create manifest.json for file-tools extension v1"
+Agent: dxt-manifest-manager
+
+# DXT Extension Configuration
+Task: "Define secure API key configuration schema"
+Agent: dxt-config-manager
+
+# DXT Extension Implementation
+Task: "Implement file-tools extension with MCP integration"
+Agent: dxt-extension-engineer
+
+# DXT Dependency Bundling
+Task: "Bundle Python dependencies for data-analyzer extension"
+Agent: dxt-dependency-bundler
+
+# DXT Extension Packaging
+Task: "Package weather-extension v2.1.0 as .dxt file"
+Agent: dxt-packager
+
+# DXT Installation Testing
+Task: "Test file-tools.dxt installation on macOS and Windows"
+Agent: dxt-installer-tester
 ```
 
 ## Important Notes
