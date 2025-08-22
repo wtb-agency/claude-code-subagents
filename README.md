@@ -4,11 +4,12 @@ A production-ready framework for implementing strict role-based separation of co
 
 ## Overview
 
-This framework implements **12 specialized agents** that handle different aspects of software development:
+This framework implements **18 specialized agents** that handle different aspects of software development:
 
 - **Orchestration**: Project coordination and approval workflows
 - **Strategy & Planning**: Vision, requirements, and roadmap management  
 - **Technical Implementation**: Contracts, code, tests, and environment setup
+- **MCP Server Development**: Protocol compliance, server implementation, tools, resources, client integration, and testing
 - **Quality & Documentation**: Consistency auditing and documentation maintenance
 
 Each agent operates within strict boundaries, requires human approval for changes, and maintains complete audit trails through decision logging.
@@ -53,6 +54,14 @@ Each agent operates within strict boundaries, requires human approval for change
 - **`test-writer`**: Automated test creation and maintenance in `tests/` only
 - **`dev-environment-maintainer`**: Dependencies, `pyproject.toml`, and dev setup
 
+### MCP Server Development
+- **`mcp-protocol-manager`**: MCP specification compliance and protocol schema contracts
+- **`mcp-server-engineer`**: Core MCP server runtime implementation
+- **`mcp-tools-manager`**: MCP tool schemas and execution handlers
+- **`mcp-resources-manager`**: MCP resource schemas and provider implementations
+- **`mcp-client-integration-manager`**: Client configurations and integration guides
+- **`mcp-test-engineer`**: MCP-specific testing and protocol validation
+
 ### Quality & Documentation
 - **`documentation-maintainer`**: Formatting, cross-references, and structural consistency
 - **`improvements-manager`**: Enhancement detection and optimization proposals
@@ -79,6 +88,9 @@ Add the agent rules to your Claude Code session:
 - orchestration rules @agents-rules/project-orchestrator-rules.md
 - data contracts manager rules @agents-rules/data-contracts-manager-rules.md
 - python pro software engineer rules @agents-rules/python-pro-software-engineer-rules.md
+- mcp protocol manager rules @agents-rules/mcp-protocol-manager-rules.md
+- mcp server engineer rules @agents-rules/mcp-server-engineer-rules.md
+- mcp tools manager rules @agents-rules/mcp-tools-manager-rules.md
 # ... (add others as needed)
 ```
 
@@ -89,7 +101,8 @@ The typical development flow:
 1. **Vision & Requirements** → `product-vision-manager` → `product-requirements-manager`
 2. **Planning** → `high-level-project-manager` → `low-level-project-manager`  
 3. **Implementation** → `data-contracts-manager` → `python-pro-software-engineer` → `test-writer`
-4. **Quality** → `consistency-auditor` → `improvements-manager`
+4. **MCP Development** → `mcp-protocol-manager` → `mcp-server-engineer` → `mcp-tools-manager` → `mcp-test-engineer`
+5. **Quality** → `consistency-auditor` → `improvements-manager`
 
 **Important**: Each step requires explicit human approval before proceeding.
 
@@ -97,7 +110,7 @@ The typical development flow:
 
 ```
 .claude/
-  agents/                       # Agent definitions (12 files)
+  agents/                       # Agent definitions (18 files)
   state.json                    # Central project state (orchestrator-only)
 
 docs/
@@ -107,6 +120,8 @@ docs/
   roadmap.md                    # High-level project phases  
   backlog.md                    # Detailed task breakdown
   contracts.md                  # Contract version index
+  mcp-contracts.md              # MCP protocol version index
+  mcp-integration/              # MCP client integration guides
   development.md                # Development environment setup
   consistency-report.md         # Drift detection results
   improvement-report.md         # Enhancement proposals
@@ -114,11 +129,23 @@ docs/
 contracts/
   *.v1.json                     # Versioned JSON Schema contracts
   *.v2.json                     # Contract evolution with semver
+  mcp/                          # MCP protocol and capability contracts
+    tools/                      # MCP tool schemas
+    resources/                  # MCP resource schemas
+
+configs/
+  mcp-clients/                  # Client-specific MCP configurations
 
 src/                            # Production Python modules
-tests/                          # Automated test suite
+  mcp/                          # MCP server implementation
+    server/                     # Core server runtime
+    tools/                      # Tool handlers
+    resources/                  # Resource providers
 
-agents-rules/                   # Agent behavior rules (12 files)
+tests/                          # Automated test suite
+  mcp/                          # MCP-specific tests
+
+agents-rules/                   # Agent behavior rules (18 files)
 ```
 
 ## Agent Usage Examples
@@ -159,6 +186,32 @@ Task: "Check for drift between contracts and implementation"
 Agent: consistency-auditor
 ```
 
+### MCP Development
+```
+Task: "Define MCP tools capability schema v1"
+Agent: mcp-protocol-manager
+```
+
+```
+Task: "Implement MCP server with stdio transport"
+Agent: mcp-server-engineer
+```
+
+```
+Task: "Create file system tools for MCP server"
+Agent: mcp-tools-manager
+```
+
+```
+Task: "Add Claude Desktop integration config"
+Agent: mcp-client-integration-manager
+```
+
+```
+Task: "Write MCP protocol compliance tests"
+Agent: mcp-test-engineer
+```
+
 ## Key Constraints
 
 ### Never Bypass Approval Gates
@@ -169,8 +222,12 @@ Agent: consistency-auditor
 ### Respect File Boundaries
 - `.claude/state.json` → **only** `project-orchestrator`
 - `src/**` → **only** `python-pro-software-engineer`  
+- `src/mcp/**` → **only** `mcp-server-engineer`, `mcp-tools-manager`, `mcp-resources-manager`
 - `tests/**` → **only** `test-writer`
+- `tests/mcp/**` → **only** `mcp-test-engineer`
 - `contracts/**` → **only** `data-contracts-manager`
+- `contracts/mcp/**` → **only** `mcp-protocol-manager`, `mcp-tools-manager`, `mcp-resources-manager`
+- `configs/mcp-clients/**` → **only** `mcp-client-integration-manager`
 - `pyproject.toml` → **only** `dev-environment-maintainer`
 
 ### Maintain Evidence Chain

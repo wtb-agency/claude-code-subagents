@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a **Claude Code Subagent Framework** that implements strict role-based separation of concerns with human approval workflows. The framework ensures that different aspects of software development (orchestration, requirements, contracts, implementation, testing, documentation) are handled by specialized agents with clear boundaries and mandatory approval gates.
+This is a **Claude Code Subagent Framework** that implements strict role-based separation of concerns with human approval workflows. The framework ensures that different aspects of software development (orchestration, requirements, contracts, implementation, testing, documentation, MCP server development) are handled by specialized agents with clear boundaries and mandatory approval gates.
 
 ## Core Architecture
 
@@ -31,6 +31,14 @@ This is a **Claude Code Subagent Framework** that implements strict role-based s
 - `test-writer`: Automated tests in `tests/` only
 - `dev-environment-maintainer`: `pyproject.toml`, `uv` dependencies, dev setup
 
+**MCP Server Development:**
+- `mcp-protocol-manager`: MCP specification compliance and protocol schema contracts
+- `mcp-server-engineer`: Core MCP server runtime implementation
+- `mcp-tools-manager`: MCP tool schemas and execution handlers
+- `mcp-resources-manager`: MCP resource schemas and provider implementations
+- `mcp-client-integration-manager`: Client configurations and integration guides
+- `mcp-test-engineer`: MCP-specific testing and protocol validation
+
 **Quality & Documentation:**
 - `documentation-maintainer`: Formatting, cross-references, consistency (no content creation)
 - `improvements-manager`: Enhancement suggestions and optimization recommendations
@@ -39,10 +47,16 @@ This is a **Claude Code Subagent Framework** that implements strict role-based s
 
 ### Role Boundaries
 - **Only `project-orchestrator`** can edit `.claude/state.json`
-- **Only `python-pro-software-engineer`** can edit `src/**`
-- **Only `test-writer`** can edit `tests/**`
-- **Only `data-contracts-manager`** can edit `contracts/**`
+- **Only `python-pro-software-engineer`** can edit `src/**` (excluding `src/mcp/**`)
+- **Only `test-writer`** can edit `tests/**` (excluding `tests/mcp/**`)
+- **Only `data-contracts-manager`** can edit `contracts/**` (excluding `contracts/mcp/**`)
 - **Only `dev-environment-maintainer`** can edit `pyproject.toml`
+- **Only `mcp-server-engineer`** can edit `src/mcp/server/**`
+- **Only `mcp-tools-manager`** can edit `src/mcp/tools/**` and `contracts/mcp/tools/**`
+- **Only `mcp-resources-manager`** can edit `src/mcp/resources/**` and `contracts/mcp/resources/**`
+- **Only `mcp-protocol-manager`** can edit `contracts/mcp/**` (general protocols)
+- **Only `mcp-client-integration-manager`** can edit `configs/mcp-clients/**`
+- **Only `mcp-test-engineer`** can edit `tests/mcp/**`
 
 ### Approval Workflow
 1. Agent performs its specialized task
@@ -74,11 +88,28 @@ docs/
   requirements.md           # Product requirements
   roadmap.md                # High-level project phases
   contracts.md              # Contract version index
+  mcp-contracts.md          # MCP protocol version index
+  mcp-integration/          # MCP client integration guides
   development.md            # Dev environment setup
 
-contracts/*.json            # Versioned JSON Schema contracts
+contracts/
+  *.json                    # Versioned JSON Schema contracts
+  mcp/                      # MCP protocol and capability contracts
+    tools/                  # MCP tool schemas
+    resources/              # MCP resource schemas
+
+configs/
+  mcp-clients/              # Client-specific MCP configurations
+
 src/                        # Production Python modules
+  mcp/                      # MCP server implementation
+    server/                 # Core server runtime
+    tools/                  # Tool handlers
+    resources/              # Resource providers
+
 tests/                      # Automated test suite
+  mcp/                      # MCP-specific tests
+
 agents-rules/               # Agent-specific behavior rules (template)
 ```
 
@@ -120,6 +151,26 @@ Agent: dev-environment-maintainer
 # Consistency check
 Task: "Audit repository for contract/code drift"
 Agent: consistency-auditor
+
+# MCP Protocol Definition
+Task: "Define MCP tools capability schema v1"
+Agent: mcp-protocol-manager
+
+# MCP Server Implementation  
+Task: "Implement MCP server with stdio transport"
+Agent: mcp-server-engineer
+
+# MCP Tool Development
+Task: "Create file system tools for MCP server"
+Agent: mcp-tools-manager
+
+# MCP Client Integration
+Task: "Add Claude Desktop integration config"
+Agent: mcp-client-integration-manager
+
+# MCP Testing
+Task: "Write MCP protocol compliance tests"
+Agent: mcp-test-engineer
 ```
 
 ## Important Notes
