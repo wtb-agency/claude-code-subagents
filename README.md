@@ -1,39 +1,41 @@
-# Claude Code Subagent Framework
+# Claude Code Subagent Library
 
-A production-ready framework for implementing strict role-based separation of concerns in software development using Claude Code's Task tool system. This framework ensures disciplined development practices through specialized agents, mandatory approval workflows, and comprehensive state management.
+A library of 24 specialized agents for Claude Code's Task tool, plus a bootstrap system to create focused customer projects. Includes agent coordination framework with file ownership boundaries and approval workflows.
 
 ## Overview
 
-This framework implements **12 specialized agents** that handle different aspects of software development:
+This library provides **24 specialized agents** and a **project bootstrap system** for different aspects of software development:
 
 - **Orchestration**: Project coordination and approval workflows
 - **Strategy & Planning**: Vision, requirements, and roadmap management  
 - **Technical Implementation**: Contracts, code, tests, and environment setup
+- **MCP Server Development**: Protocol compliance, server implementation, tools, resources, client integration, and testing
+- **DXT Extension Development**: Claude Desktop extension manifests, configuration, implementation, dependency bundling, packaging, and installation testing
 - **Quality & Documentation**: Consistency auditing and documentation maintenance
 
-Each agent operates within strict boundaries, requires human approval for changes, and maintains complete audit trails through decision logging.
+Agents get copied to customer projects where they work within file ownership boundaries and approval workflows.
 
-## Core Principles
+## How the Bootstrap System Works
 
-### 🔒 Strict Role Separation
-- Only specific agents can edit specific file types
-- Clear boundaries prevent scope creep and maintain system integrity
-- Each agent has explicit constraints and forbidden actions
+### Project Bootstrap Process
+1. **Conversation**: `project-bootstrap` agent gathers project requirements
+2. **Analysis**: Determines which agents are needed based on project type
+3. **Selection**: Copies only relevant agents from the library (not all 24)
+4. **Setup**: Creates project structure, runs `uv init` for Python projects
+5. **Documentation**: Generates project-specific README.md with usage instructions
 
-### 🚦 Mandatory Approval Gates
-- All changes require entries in `docs/decisions.md` with `Pending` status
-- Agents **STOP** after logging decisions and wait for explicit human approval
-- No agent can bypass the approval workflow
+### Agent Selection Examples
+- **DXT Extension**: Copies orchestrator + DXT agents (10 agents)
+- **MCP Server**: Copies orchestrator + MCP agents (8 agents) 
+- **Data Pipeline**: Copies orchestrator + code/test agents (6 agents)
+- **Full Project**: Copies orchestrator + planning + implementation agents (12+ agents)
 
-### 📊 State-Driven Architecture
-- Central state management in `.claude/state.json` (orchestrator-only)
-- Complete decision audit trail with ISO 8601 timestamps
-- Full traceability of all project changes and approvals
-
-### 🎯 Evidence-Based Operations
-- All agents operate on approved specifications and contracts
-- Changes must reference existing approved documents
-- No assumptions or improvisation allowed
+### Bootstrapped Project Structure
+Each customer project gets:
+- Selected agents copied to `.claude/agents/`
+- Corresponding rules copied to `agents-rules/`
+- `AGENTS.md` coordination framework
+- Project-specific README.md with usage examples
 
 ## Agent Architecture
 
@@ -49,197 +51,86 @@ Each agent operates within strict boundaries, requires human approval for change
 
 ### Technical Implementation
 - **`data-contracts-manager`**: Versioned JSON Schema contracts with validation rules
-- **`python-pro-software-engineer`**: Production code implementation in `src/` only
+- **`python-code-writer`**: Code implementation in `src/` only
 - **`test-writer`**: Automated test creation and maintenance in `tests/` only
 - **`dev-environment-maintainer`**: Dependencies, `pyproject.toml`, and dev setup
+
+### MCP Server Development
+- **`mcp-schema-writer`**: MCP protocol schema files
+- **`mcp-server-engineer`**: Core MCP server runtime implementation
+- **`mcp-tools-manager`**: MCP tool schemas and execution handlers
+- **`mcp-resources-manager`**: MCP resource schemas and provider implementations
+- **`mcp-client-integration-manager`**: Client configurations and integration guides
+- **`mcp-test-engineer`**: MCP-specific testing and protocol validation
+
+### DXT Extension Development
+- **`dxt-manifest-manager`**: Claude Desktop extension manifest.json files and metadata
+- **`dxt-config-manager`**: User configuration schemas and secure data handling patterns
+- **`dxt-extension-engineer`**: Claude Desktop extension implementation and MCP integration
+- **`dxt-dependency-bundler`**: Python venv/lib, Node.js node_modules, and binary dependency bundling
+- **`dxt-zip-creator`**: .dxt package creation (zip files)
+- **`dxt-installer-tester`**: Installation testing and Claude Desktop integration validation
 
 ### Quality & Documentation
 - **`documentation-maintainer`**: Formatting, cross-references, and structural consistency
 - **`improvements-manager`**: Enhancement detection and optimization proposals
 
-## Quick Start
+## Bootstrap New Projects
 
-### 1. Initialize Your Project
+Use the bootstrap agent to create focused customer projects:
 
-Use Claude Code's Task tool to start with the orchestrator:
+**Bootstrap Usage:**
+```bash
+# Create DXT extension project
+Task: "Bootstrap new DXT extension for Shopify order validation" 
+Agent: project-bootstrap
 
-```
-Task: "Initialize project state for [your project description]"
-Agent: project-orchestrator
-```
+# Create MCP server project
+Task: "Bootstrap MCP server for file system operations"
+Agent: project-bootstrap
 
-This creates `.claude/state.json` and `docs/decisions.md` with the first pending decision.
-
-### 2. Import Agent Rules
-
-Add the agent rules to your Claude Code session:
-
-```
-# Additional Instructions
-- orchestration rules @agents-rules/project-orchestrator-rules.md
-- data contracts manager rules @agents-rules/data-contracts-manager-rules.md
-- python pro software engineer rules @agents-rules/python-pro-software-engineer-rules.md
-# ... (add others as needed)
+# Create data pipeline project  
+Task: "Bootstrap Python project for CSV processing"
+Agent: project-bootstrap
 ```
 
-### 3. Follow the Workflow
+**The bootstrap agent will gather requirements, select appropriate agents, and create a focused project setup.**
 
-The typical development flow:
-
-1. **Vision & Requirements** → `product-vision-manager` → `product-requirements-manager`
-2. **Planning** → `high-level-project-manager` → `low-level-project-manager`  
-3. **Implementation** → `data-contracts-manager` → `python-pro-software-engineer` → `test-writer`
-4. **Quality** → `consistency-auditor` → `improvements-manager`
-
-**Important**: Each step requires explicit human approval before proceeding.
-
-## File Structure
+## Library File Structure
 
 ```
-.claude/
-  state.json                    # Central project state (orchestrator-only)
-
-docs/
-  decisions.md                  # Decision log with approval workflow
-  vision.md                     # Product vision and strategy
-  requirements.md               # Functional requirements
-  roadmap.md                    # High-level project phases  
-  backlog.md                    # Detailed task breakdown
-  contracts.md                  # Contract version index
-  development.md                # Development environment setup
-  consistency-report.md         # Drift detection results
-  improvement-report.md         # Enhancement proposals
-
-contracts/
-  *.v1.json                     # Versioned JSON Schema contracts
-  *.v2.json                     # Contract evolution with semver
-
-src/                            # Production Python modules
-tests/                          # Automated test suite
-
-agents/                         # Agent definitions (12 files)
-agents-rules/                   # Agent behavior rules (12 files)
+claude-code-subagents/                  # This repository
+├── .claude/
+│   └── agents/
+│       └── project-bootstrap.md       # Bootstrap tool
+├── agents/                            # Agent library (24 agents)
+│   ├── project-orchestrator.md
+│   ├── consistency-auditor.md  
+│   ├── [6 MCP agents...]
+│   ├── [6 DXT agents...]
+│   └── [remaining agents...]
+├── agents-rules/                      # Rules library (24 rules)
+│   ├── project-orchestrator-rules.md
+│   ├── consistency-auditor-rules.md
+│   └── [corresponding rules...]
+├── AGENTS.md                          # Coordination framework (copied to projects)
+├── README.md                          # This file
+└── CLAUDE.md                          # Library usage guide for Claude Code
 ```
-
-## Agent Usage Examples
-
-### Define Requirements
-```
-Task: "Create requirements for Excel order processing system"
-Agent: product-requirements-manager
-```
-
-### Create Data Contracts  
-```
-Task: "Define JSON schema for normalized order objects v1"
-Agent: data-contracts-manager
-```
-
-### Implement Code
-```
-Task: "Implement Excel parser per approved contract v1"  
-Agent: python-pro-software-engineer
-```
-
-### Write Tests
-```
-Task: "Create tests for src/excel_parser/"
-Agent: test-writer  
-```
-
-### Environment Setup
-```
-Task: "Add pandas and openpyxl dependencies"
-Agent: dev-environment-maintainer
-```
-
-### Quality Audits
-```
-Task: "Check for drift between contracts and implementation"
-Agent: consistency-auditor
-```
-
-## Key Constraints
-
-### Never Bypass Approval Gates
-- **All agents STOP** after logging pending decisions
-- **No agent proposes next steps** - only humans decide workflow progression
-- **Changes are invalid** until explicitly approved by humans
-
-### Respect File Boundaries
-- `.claude/state.json` → **only** `project-orchestrator`
-- `src/**` → **only** `python-pro-software-engineer`  
-- `tests/**` → **only** `test-writer`
-- `contracts/**` → **only** `data-contracts-manager`
-- `pyproject.toml` → **only** `dev-environment-maintainer`
-
-### Maintain Evidence Chain
-- All changes must reference approved specifications
-- No improvisation or assumption-making allowed
-- Complete audit trail through decision logging
-- Traceability from requirements through implementation
-
-## Decision Workflow
-
-Every agent follows this pattern:
-
-1. **Execute Task** within strict role boundaries
-2. **Log Decision** in `docs/decisions.md` with status `Pending`  
-3. **STOP** immediately and await human input
-4. **Human Reviews** and provides explicit approval/rejection
-5. **State Updated** with approval timestamp by orchestrator
-
-## Development Best Practices
-
-### Use Appropriate Tools
-- **Always use `uv` instead of `pip`** for Python dependencies
-- **Prefer Task tool dispatch** over direct file editing
-- **Follow agent boundaries** - never bypass role separation
-- **Document all decisions** with clear rationale
-
-### Maintain Quality Gates
-- **Profile data before transforming** (when applicable)
-- **Validate against contracts** before implementation  
-- **Run consistency audits** regularly
-- **Review improvement suggestions** periodically
-
-### Plan Incrementally  
-- **Process requirements in chunks** (1-2 major features per cycle)
-- **Version contracts semantically** (breaking vs non-breaking changes)
-- **Implement minimal viable solutions** that satisfy contracts
-- **Test continuously** against approved specifications
-
-## Troubleshooting
-
-### Agent Won't Proceed
-- **Check pending decisions** in `docs/decisions.md`  
-- **Provide explicit approval** before expecting progress
-- **Use orchestrator** to manage state transitions
-
-### Boundary Violations
-- **Review agent constraints** in `agents-rules/*.md`
-- **Use correct agent** for specific file types
-- **Never edit files directly** - always use appropriate agents
-
-### Workflow Confusion
-- **Start with orchestrator** for project initialization  
-- **Follow approval gates** - each step requires human input
-- **Reference decision log** to understand current project state
 
 ## Contributing
 
-This framework is designed for:
+This is an experimental framework for:
 
-- **Software development teams** requiring disciplined practices
-- **Compliance-critical projects** needing full audit trails
-- **Complex systems** benefiting from role separation  
-- **Quality-focused workflows** with evidence-based decisions
+- **File coordination** when multiple people work on different parts
+- **Basic approval tracking** to avoid unreviewed changes
+- **Task dispatch** using Claude Code's agent system
 
-The framework enforces best practices through tooling rather than relying on human discipline alone.
+It's a simple coordination system, not an enforcement tool.
 
 ## License
 
-This framework is provided as-is for software development process improvement. Adapt the agents and rules to fit your specific project needs while maintaining the core principles of role separation, approval gates, and evidence-based operations.
+This experimental framework is provided as-is. Adapt the agents and rules to fit your project needs.
 
 ---
 

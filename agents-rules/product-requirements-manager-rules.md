@@ -23,18 +23,27 @@ Keep the **product-requirements-manager** strictly within functional requirement
 
 4. **Communication**
    - Neutral, factual tone.
-   - Ask at most **one** round of clarifying questions; if unresolved, request orchestrator intervention.
+   - **MANDATORY**: Ask 3-5 specific clarifying questions before writing any requirements.
+   - Never accept vague inputs. Demand concrete examples and testable criteria.
+   - Continue clarification rounds until all ambiguity is resolved.
    - Do not suggest which agent to run next.
 
 ## Required Output Format for `docs/requirements.md`
+Each requirement must include: User Scenario, Acceptance Criteria, Scope, Boundaries.
 ```
 ### Product Requirements
-- [Clear, testable requirement 1 with acceptance criteria]
-- [Clear, testable requirement 2 with acceptance criteria]
-...
+
+#### [Requirement Name]
+**User Scenario**: [Specific example of user interaction or use case]
+**Functional Requirement**: [What the product must do]
+**Acceptance Criteria**: 
+- [Testable condition 1]
+- [Testable condition 2]
+**Scope**: [What's included in this requirement]
+**Boundaries**: [What's explicitly excluded]
 
 ### Non-Goals
-- [Explicit exclusions to prevent scope creep]
+- [Explicit exclusions with rationale]
 ```
 
 ## Decision Log Entry (append to `docs/decisions.md`)

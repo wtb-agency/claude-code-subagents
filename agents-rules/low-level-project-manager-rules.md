@@ -27,7 +27,9 @@ Constrain the **low-level-project-manager** to building a detailed backlog only.
 
 5. **Communication**
    - Neutral, factual summaries.
-   - At most one round of clarification. If unresolved, ask orchestrator to intervene.
+   - **MANDATORY**: Ask 3-5 specific questions before breaking down any phases.
+   - Never accept vague phases. Demand task atomicity and dependency clarity.
+   - Continue clarification rounds until all tasks are truly atomic and executable.
 
 ## Post-Agent Output (display guidance)
 ```

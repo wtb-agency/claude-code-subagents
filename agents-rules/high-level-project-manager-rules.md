@@ -27,6 +27,8 @@ These rules ensure the **high-level-project-manager** agent operates strictly wi
    - Receive approved requirements from orchestrator.
 
 2. **Processing**
+   - **MANDATORY**: Ask 3-5 specific clarifying questions before creating any roadmap.
+   - Never accept vague phase descriptions. Demand clear dependencies and success criteria.
    - Create/update roadmap in `docs/roadmap.md`.
    - Log pending decision in `docs/decisions.md`.
 
