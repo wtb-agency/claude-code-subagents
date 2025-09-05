@@ -1,0 +1,24 @@
+{
+  "hooks": [
+    {
+      "name": "Log Planning Agent Decisions",
+      "description": "Automatically log decisions from planning agents and require approval",
+      "events": ["PostToolUse"],
+      "matchTool": ["Edit", "Write", "MultiEdit"],
+      "command": [
+        "bash", "-c",
+"# Get tool details from input\nTOOL_NAME=$(echo \"$CLAUDE_HOOK_INPUT\" | jq -r '.tool // empty')\nFILE_PATH=$(echo \"$CLAUDE_HOOK_INPUT\" | jq -r '.file_path // empty')\n\nif [ -z \"$FILE_PATH\" ]; then\n  exit 0\nfi\n\n# Skip logging for system files that don't need approval\ncase \"$FILE_PATH\" in\n  \".claude/\"*|\"agents-rules/\"*|\"AGENTS.md\")\n    exit 0\n    ;;\nesac\n\n# Log decisions for key project files that agents modify\n# This works regardless of which agent made the change\nTIMESTAMP=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\")\n\ncase \"$FILE_PATH\" in\n  \"docs/requirements.md\")\n    cat >> docs/decisions.md << EOF\n\n## $TIMESTAMP - Requirements Update\n**Status**: Pending\n**Context**: Requirements modified - please review changes\n**Action**: Updated functional requirements in docs/requirements.md\n**Approval**: Awaiting human approval\n\nEOF\n    echo \"📝 Requirements change logged as pending decision\"\n    ;;\n  \"docs/vision.md\")\n    cat >> docs/decisions.md << EOF\n\n## $TIMESTAMP - Vision/Mission Update\n**Status**: Pending\n**Context**: Vision/mission modified - please review changes\n**Action**: Updated strategy artifacts in docs/vision.md\n**Approval**: Awaiting human approval\n\nEOF\n    echo \"📝 Vision change logged as pending decision\"\n    ;;\n  \"docs/roadmap.md\")\n    cat >> docs/decisions.md << EOF\n\n## $TIMESTAMP - Roadmap Update\n**Status**: Pending\n**Context**: Project roadmap modified - please review changes\n**Action**: Updated phases and milestones in docs/roadmap.md\n**Approval**: Awaiting human approval\n\nEOF\n    echo \"📝 Roadmap change logged as pending decision\"\n    ;;\n  \"docs/backlog.md\")\n    cat >> docs/decisions.md << EOF\n\n## $TIMESTAMP - Backlog Update\n**Status**: Pending\n**Context**: Work breakdown modified - please review changes\n**Action**: Updated task breakdown in docs/backlog.md\n**Approval**: Awaiting human approval\n\nEOF\n    echo \"📝 Backlog change logged as pending decision\"\n    ;;\n  contracts/*)\n    CONTRACT_NAME=$(basename \"$FILE_PATH\")\n    cat >> docs/decisions.md << EOF\n\n## $TIMESTAMP - Contract Update\n**Status**: Pending\n**Context**: Data contract modified - please review changes\n**Action**: Updated contract: $CONTRACT_NAME\n**Approval**: Awaiting human approval\n\nEOF\n    echo \"📝 Contract change logged as pending decision\"\n    ;;\n  src/*|tests/*)\n    # Log code and test changes but with less urgency\n    COMPONENT=$(dirname \"$FILE_PATH\")\n    cat >> docs/decisions.md << EOF\n\n## $TIMESTAMP - Code Update\n**Status**: Pending\n**Context**: Code modified in $COMPONENT - please review implementation\n**Action**: Updated $(basename \"$FILE_PATH\")\n**Approval**: Awaiting human approval\n\nEOF\n    echo \"📝 Code change logged as pending decision\"\n    ;;\nesac"
+      ]
+    },
+    {
+      "name": "Notify on Approval Needed",
+      "description": "Send notification when decisions are pending approval",
+      "events": ["PostToolUse"],
+      "matchTool": ["Edit", "Write", "MultiEdit"],
+      "command": [
+        "bash", "-c",
+        "# Check for pending decisions\nif [ -f \"docs/decisions.md\" ]; then\n  PENDING_COUNT=$(grep -c \"Status.*: Pending\" docs/decisions.md 2>/dev/null || echo 0)\n  \n  if [ $PENDING_COUNT -gt 0 ]; then\n    echo \"\"\n    echo \"⏳ $PENDING_COUNT pending decision(s) require approval\"\n    echo \"   Use /approve-decision to review and approve\"\n    echo \"   Use /approve-decision --list to see all pending decisions\"\n  fi\nfi"
+      ]
+    }
+  ]
+}
