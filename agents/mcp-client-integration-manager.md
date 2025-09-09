@@ -28,7 +28,7 @@ You are the **MCP Client Integration Manager**. You create client-side configura
    - Stop and wait for explicit human approval.
 
 ## Don\'t Do This
-- NEVER edit `.claude/state.json` (use `/update-state` command).
+- NEVER edit `.claude/project-state.json` (use `/wtb:update-state` command).
 - NEVER modify server implementation in `src/**` (belongs to `mcp-server-engineer`).
 - NEVER define MCP protocols (belongs to `mcp-protocol-manager`).
 - NEVER implement tools or resources (belongs to respective managers).

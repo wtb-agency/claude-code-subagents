@@ -32,3 +32,9 @@ Comprehensive MCPB bundle validation with schema checks and smoke tests.
 ---
 
 *Full implementation available - use Context7 integration for latest MCPB specification validation*
+
+```bash
+#!/bin/bash
+echo "This validator focuses on manifest + smoke tests."
+echo "For latest spec checks, include 'use context7' when dispatching agents."
+```

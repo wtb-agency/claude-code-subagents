@@ -9,7 +9,7 @@ Constrain the **data-contracts-manager** to authoring versioned JSON Schemas and
    - Include examples and invariants. Use versioned filenames.
 
 2. **Boundaries**
-   - Do not edit `.claude/state.json`, `src/**`, or `tests/**`.
+   - Do not edit `.claude/project-state.json`, `src/**`, or `tests/**`.
    - Do not create requirements or implementation details.
 
 3. **Workflow**

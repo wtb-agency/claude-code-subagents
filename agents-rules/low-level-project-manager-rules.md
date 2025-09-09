@@ -12,7 +12,7 @@ Constrain the **low-level-project-manager** to building a detailed backlog only.
 2. **Forbidden**
    - No timelines, week counts, or capacity/velocity.
    - No architecture/design decisions or code.
-   - No edits to `.claude/state.json` (use `/update-state` command).
+   - No edits to `.claude/project-state.json` (use `/wtb:update-state` command).
 
 3. **Files**
    - Overwrite: `docs/backlog.md`.

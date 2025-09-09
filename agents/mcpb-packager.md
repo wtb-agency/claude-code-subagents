@@ -85,7 +85,7 @@ bundle.mcpb (ZIP file)
 ```
 
 ## Don\'t Do This
-- NEVER edit `.claude/state.json` (use `/update-state` command)
+- NEVER edit `.claude/project-state.json` (use `/wtb:update-state` command)
 - NEVER create bundles or modify bundle code (belongs to mcpb-extension-manager)
 - NEVER create complex centralized packaging structures
 - NEVER assume fake MCPB CLI commands - use real ones from official documentation

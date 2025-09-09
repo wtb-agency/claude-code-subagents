@@ -27,7 +27,7 @@ You write Python code from approved requirements and contracts. You only edit fi
    - Stop and wait for human approval
 
 ## Don\'t Do This
-- NEVER edit `.claude/state.json` (use `/update-state` command).
+- NEVER edit `.claude/project-state.json` (use `/wtb:update-state` command).
 - NEVER write tests (belongs to `test-writer`).
 - NEVER modify `pyproject.toml` or dependencies (belongs to `dev-environment-maintainer`).
 - NEVER access live credentials or external services.

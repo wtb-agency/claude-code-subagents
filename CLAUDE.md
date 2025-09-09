@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a **Claude Code Subagent Library** that provides:
+This is a **Claude Code Subagent Library** primarily aimed at developing Claude Desktop extensions as MCP Bundles (MCPB). It also supports MCP server and general Python workflows. It provides:
 - **Agent Library**: Collection of 21 specialized agents for different development tasks
 - **WTB Command Library**: 8 focused WTB commands for MCP/MCPB workflows
 - **Rules Library**: Behavioral constraints and boundaries for each agent  
@@ -16,7 +16,7 @@ The agents in this library get copied to customer projects where Claude Code's g
 ## Library Structure
 
 ### Agent Library (`agents/`)
-Contains 20 specialized agents organized by category:
+Contains specialized agents organized by category (with a primary focus on MCPB/Claude Desktop extension development):
 - **Orchestration**: Project coordination and approval workflows
 - **Strategy & Planning**: Vision, requirements, and roadmap management  
 - **Technical Implementation**: Contracts, code, tests, and environment setup
@@ -50,7 +50,7 @@ Contains 20 specialized agents organized by category:
 - `mcp-client-integration-manager`: Client configurations and integration guides
 - `mcp-test-engineer`: MCP-specific testing
 
-**MCP Bundle Development:**
+**MCP Bundle Development (Claude Desktop extensions):**
 - `mcpb-extension-manager`: Implement MCP server code for bundles (server/ directory only)
 - `mcpb-manifest-builder`: Create and manage manifest.json files with user configuration
 - `mcpb-packager`: Package bundles into .mcpb files using official MCPB CLI tools
@@ -62,7 +62,7 @@ Contains 20 specialized agents organized by category:
 ## Using This Library
 
 ### Bootstrap New Projects
-Use the `project-bootstrap` agent in this repo to create new customer projects:
+Use the `project-bootstrap` agent in this repo to create new customer projects (especially Claude Desktop MCPB extension projects):
 
 ```bash
 Task: "Bootstrap new project for [description]"
@@ -100,7 +100,7 @@ Agent: project-bootstrap
 
 ### WTB Command Prefixes
 
-**Recommended**: Use WTB-prefixed commands for namespace management and ownership signaling:
+**Recommended**: Use WTB-prefixed commands for namespace management and ownership signaling (notably for MCPB/Claude Desktop workflows):
 
 ```bash
 # WTB command examples

@@ -27,3 +27,12 @@ Complete MCPB pipeline orchestrator - validate, bundle, package, and test MCP Bu
 ---
 
 *Full implementation available - use Task tool to delegate to mcpb-extension-manager, mcpb-packager for specialized operations*
+
+```bash
+#!/bin/bash
+echo "This command coordinates MCPB steps."
+echo "Use Claude Code Task to dispatch:"
+echo "  - Agent: mcpb-manifest-builder (manifest.json)"
+echo "  - Agent: mcpb-extension-manager (server implementation)"
+echo "Then package with: /wtb:mcpb-manage-extension --all"
+```

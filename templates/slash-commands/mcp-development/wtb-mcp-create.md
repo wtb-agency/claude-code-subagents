@@ -30,3 +30,12 @@ One-shot MCP Bundle creation orchestrator - scaffold, implement, validate, packa
 ---
 
 *Full implementation available - use Task tool to delegate to mcpb-extension-manager and mcpb-manifest-builder for complex bundle logic*
+
+```bash
+#!/bin/bash
+echo "This command is an orchestrator spec."
+echo "Use Claude Code Task to dispatch:"
+echo "  - Agent: mcpb-manifest-builder (create/update manifest)"
+echo "  - Agent: mcpb-extension-manager (implement server in server/)"
+echo "Then run: /wtb:mcpb-manage-extension --all"
+```

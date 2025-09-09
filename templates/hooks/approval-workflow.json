@@ -17,7 +17,7 @@
       "matchTool": ["Edit", "Write", "MultiEdit"],
       "command": [
         "bash", "-c",
-        "# Check for pending decisions\nif [ -f \"docs/decisions.md\" ]; then\n  PENDING_COUNT=$(grep -c \"Status.*: Pending\" docs/decisions.md 2>/dev/null || echo 0)\n  \n  if [ $PENDING_COUNT -gt 0 ]; then\n    echo \"\"\n    echo \"⏳ $PENDING_COUNT pending decision(s) require approval\"\n    echo \"   Use /approve-decision to review and approve\"\n    echo \"   Use /approve-decision --list to see all pending decisions\"\n  fi\nfi"
+        "# Check for pending decisions\nif [ -f \"docs/decisions.md\" ]; then\n  PENDING_COUNT=$(grep -c \"Status.*: Pending\" docs/decisions.md 2>/dev/null || echo 0)\n  \n  if [ $PENDING_COUNT -gt 0 ]; then\n    echo \"\"\n    echo \"⏳ $PENDING_COUNT pending decision(s) require approval\"\n    echo \"   Use /wtb:approve-decision --latest to approve the newest\"\n    echo \"   Or run /wtb:approve-decision --list to see all pending decisions\"\n  fi\nfi"
       ]
     }
   ]

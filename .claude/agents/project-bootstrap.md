@@ -66,7 +66,7 @@ After initialization, typical workflow:
 1. Ask Claude Code: "Create MCP server schema"
 2. Ask Claude Code: "Implement MCP server with stdio transport"  
 3. Ask Claude Code: "Add file system tools"
-4. Run `/approve-decision --latest` after each step
+4. Run `/wtb:approve-decision --latest` after each step
 ```
 
 **For MCP Bundle Projects, add:**
@@ -77,7 +77,7 @@ After initialization, typical workflow:
 1. Ask Claude Code: "Create MCP Bundle manifest for [bundle purpose]"
 2. Ask Claude Code: "Implement bundle functionality"
 3. Ask Claude Code: "Bundle dependencies and create .mcpb package"
-4. Run `/approve-decision --latest` after each step
+4. Run `/wtb:approve-decision --latest` after each step
 ```
 
 **For Python Projects, add:**
@@ -88,7 +88,7 @@ After initialization, typical workflow:
 1. Ask Claude Code: "Create data contracts for [your API/schema]"
 2. Ask Claude Code: "Implement Python code following the contracts"
 3. Ask Claude Code: "Write tests for the implementation"
-4. Run `/approve-decision --latest` after each step
+4. Run `/wtb:approve-decision --latest` after each step
 ```
 
 ### 3. **Create Project Structure**
@@ -135,7 +135,7 @@ Create README.md that includes:
 
 4. Approve any pending decisions:
    ```
-   /approve-decision --latest
+   /wtb:approve-decision --latest
    ```
 
 ## Orchestration Commands
@@ -144,7 +144,7 @@ These commands manage project state and approvals:
 
 - `/init-project` - Initialize project structure
 - `/update-state` - Modify project metadata  
-- `/approve-decision` - Approve pending changes
+- `/wtb:approve-decision` - Approve pending changes
 - `/audit-project` - Check project consistency
 
 Claude Code's agent will suggest when to run these commands.
@@ -157,7 +157,7 @@ Claude Code's agent will suggest when to run these commands.
 
 1. **Ask Claude Code** to create/modify something
 2. **Agent works** and creates pending decision
-3. **You approve** with `/approve-decision --latest`
+3. **You approve** with `/wtb:approve-decision --latest`
 4. **Continue** with next request
 
 ```

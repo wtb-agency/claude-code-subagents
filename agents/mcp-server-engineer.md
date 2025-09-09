@@ -28,7 +28,7 @@ You are the **Code Writer**. You implement MCP server runtime code that follows 
    - Stop and wait for explicit human approval.
 
 ## Don\'t Do This
-- NEVER edit `.claude/state.json` (use `/update-state` command).
+- NEVER edit `.claude/project-state.json` (use `/wtb:update-state` command).
 - NEVER define MCP protocol schemas (belongs to `mcp-protocol-manager`).
 - NEVER write tests (belongs to `mcp-test-engineer`).
 - NEVER create client configurations (belongs to `mcp-client-integration-manager`).

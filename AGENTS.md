@@ -1,16 +1,21 @@
 # Claude Code Subagent Coordination Rules
 
+Primary scope: These coordination rules are optimized for building Claude Desktop extensions using MCP Bundles (MCPB). The framework also supports MCP server and general code workflows, but the intended main use is MCPB-based Claude Desktop extension development.
+
 **IMPORTANT**: This file defines behavioral rules specifically for Claude Code's **general-purpose agent**. If Claude Code's agent structure changes (e.g., "general-purpose agent" is renamed or replaced), Claude Code must immediately flag this change when processing requests and request updated coordination rules.
 
-This file defines how Claude Code's **general-purpose agent** should behave when working with the specialized subagents in this framework. These rules ensure proper agent coordination, prevent workflow corruption, and maintain the integrity of the state-driven architecture.
+This file defines how Claude Code's **general-purpose agent** should behave when working with the specialized subagents in this framework. These rules ensure proper agent coordination, prevent workflow corruption, and maintain the integrity of the state-driven architecture for Claude Desktop extension development via MCP Bundles.
 
 ## Core Principles
 
 1. **Native Orchestration**: Claude Code's general-purpose agent uses slash commands and hooks for orchestration
 2. **Prompt Validation**: Every agent dispatch must follow exact syntax and be validated by the general-purpose agent before execution
 3. **State Protection**: Hooks enforce file ownership boundaries and prevent unauthorized modifications
-4. **Approval Gate Enforcement**: Hooks automatically log decisions and require human approval via `/approve-decision` command
+4. **Approval Gate Enforcement**: Hooks automatically log decisions and require human approval via `/wtb:approve-decision` command
 5. **Context7 Integration**: Agents can include "use context7" in queries for real-time documentation access without direct tool calls
+
+## Terminology
+- "Claude Desktop extension" → implemented and packaged as an MCP Bundle (`.mcpb`)
 
 ## How Claude Code's General-Purpose Agent Should Work
 
@@ -76,10 +81,10 @@ Agent: bullshit-detector
 ### Slash Commands for State Management
 Claude Code's general-purpose agent should **suggest these commands** to users for orchestration:
 
-- **`/init-project`**: Initialize `.claude/state.json` and project structure
-- **`/update-state`**: Safely modify project state with validation and logging
-- **`/approve-decision`**: Process pending decisions from approval workflow
-- **`/audit-project`**: Run consistency checks across project files
+- **`/wtb:init-project`**: Initialize `.claude/project-state.json` and project structure
+- **`/wtb:update-state`**: Safely modify project state with validation and logging
+- **`/wtb:approve-decision`**: Process pending decisions from approval workflow
+- **`/wtb:audit-project`**: Run consistency checks across project files
 
 ### Command Suggestion Protocol
 - **NEVER execute slash commands directly** - agents cannot run slash commands
@@ -93,24 +98,24 @@ Claude Code's general-purpose agent should **suggest these commands** to users f
 - **Hooks handle** boundary enforcement and approval logging automatically
 
 ### Command Suggestion Examples
-Instead of: "I'll use /update-state to modify the project state"
+Instead of: "I'll use /wtb:update-state to modify the project state"
 Say: "Please run this command to update the project state:
 ```
-/update-state .project.version "2.0.0"
+/wtb:update-state --state-file .claude/project-state.json --key "project.version" --value "2.0.0"
 ```
-This will safely modify .claude/state.json with validation and logging."
+This will safely modify .claude/project-state.json with validation and logging."
 
 ### Typical Workflow Pattern
 ```
 1. User: "Initialize a new Python project"
-2. Agent: "Please run: /init-project MyProject python
-   This creates .claude/state.json and project structure."
-3. User: [Executes /init-project MyProject python]
+2. Agent: "Please run: /wtb:init-project MyProject --type python
+   This creates .claude/project-state.json and project structure."
+3. User: [Executes /wtb:init-project MyProject --type python]
 4. Agent: "Great! Project initialized. Would you like me to create requirements?"
 5. User: "Yes, create requirements for order processing"
 6. Agent: [Dispatches product-requirements-manager agent]
 7. Agent completes requirements → Hooks log pending decision
-8. Agent: "Requirements created! Please run: /approve-decision --latest
+8. Agent: "Requirements created! Please run: /wtb:approve-decision --latest
    to approve the new requirements before proceeding."
 ```
 
@@ -157,7 +162,7 @@ If dispatch requests are unclear or malformed:
 - **mcp-test-engineer**: Only edits `tests/mcp/**`
 
 ### MCP Bundle Agents
-- **mcpb-extension-manager**: Only edits `manifest.json`, `server/main.py`, `icon.png`, and MCPB configuration files
+- **mcpb-extension-manager**: Only edits `server/**` (e.g., `server/main.py`); no manifest or packaging
 - **mcpb-packager**: Only edits `*.mcpb` files and `dist/` directory for package creation
 
 ### Boundary Violations
@@ -180,7 +185,7 @@ Claude Code's general-purpose agent must:
 Claude Code's general-purpose agent must:
 - **Confirm** task completion and file changes
 - **Reference** pending decisions (hooks handle logging automatically)
-- **Stop** and wait for human approval via `/approve-decision` before proceeding
+- **Stop** and wait for human approval via `/wtb:approve-decision` before proceeding
 - **Never** auto-dispatch follow-up agents
 
 ### Never Assume Next Steps
@@ -284,12 +289,12 @@ When copying to customer projects:
 **Command Suggestions (agent suggests, user executes):**
 ```
 Agent: "To initialize your project, please run:
-/init-project MyProject python
+/wtb:init-project MyProject --type python
 
-This will create .claude/state.json and set up the project structure."
+This will create .claude/project-state.json and set up the project structure."
 
 Agent: "To approve the pending decision, please run:
-/approve-decision --latest
+/wtb:approve-decision --latest
 
 This will mark the latest pending decision as approved."
 ```
@@ -300,7 +305,7 @@ Task: "Create requirements for order validation workflow"
 Agent: product-requirements-manager
 
 Task: "Create MCPB manifest for file validator bundle"
-Agent: mcpb-extension-manager
+Agent: mcpb-manifest-builder
 
 Task: "Review codebase for contract/code drift"
 Agent: consistency-auditor
@@ -316,7 +321,7 @@ Task: "Build the frontend"
 Agent: frontend-developer
 
 # Invalid - agent trying to execute slash commands
-Agent: "I'll run /init-project to set up the project"
+Agent: "I'll run /wtb:init-project to set up the project"
 
 # Invalid - handoff patterns are not supported
 Task: "Create contracts"

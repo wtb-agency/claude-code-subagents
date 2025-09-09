@@ -132,7 +132,7 @@ You are the **MCP Bundle Manifest Builder**. You create and manage manifest.json
 
 ## Don't Do This
 
-- NEVER edit `.claude/state.json` (use `/update-state` command)
+- NEVER edit `.claude/project-state.json` (use `/wtb:update-state` command)
 - NEVER implement MCP server code (belongs to mcp-server-engineer)
 - NEVER handle dependency bundling (belongs to mcpb-packager)
 - NEVER create packaging files (belongs to mcpb-packager)

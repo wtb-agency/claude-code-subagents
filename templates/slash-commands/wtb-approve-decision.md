@@ -1,16 +1,17 @@
 ---
 description: "Process pending decisions from approval workflow"
-argument-hint: "[decision-id] [--action approve|reject] [--comment]"
+argument-hint: "[--latest] [--list] [--action approve|reject] [--comment]"
 allowed-tools: [Read, Write, Bash, LS]
 ---
 
 Process pending decisions in the approval workflow with audit logging.
 
-**Usage**: `/wtb:approve-decision [decision-id] [--action approve|reject] [--comment]`
+**Usage**: `/wtb:approve-decision [--latest] [--list] [--action approve|reject] [--comment]`
 
 **Parameters:**
-- `decision-id`: ID of pending decision to process
-- `--action`: Action to take (approve|reject)
+- `--latest`: Approve/reject the most recent pending decision
+- `--list`: List all pending decisions and exit
+- `--action`: Action to take (approve|reject) — defaults to approve if omitted
 - `--comment`: Optional comment explaining the decision
 
 **What this command does:**
@@ -24,27 +25,34 @@ Process pending decisions in the approval workflow with audit logging.
 
 ```bash
 #!/bin/bash
-source "$(dirname "$0")/_shared-utils.md"
+# Robust utility sourcing
+if [ -f .claude/slash-commands/_shared-utils.md ]; then
+  # shellcheck disable=SC1091
+  . .claude/slash-commands/_shared-utils.md
+else
+  SCRIPT_DIR=$(dirname "$0" 2>/dev/null || pwd)
+  if [ -f "$SCRIPT_DIR/_shared-utils.md" ]; then
+    # shellcheck disable=SC1091
+    . "$SCRIPT_DIR/_shared-utils.md"
+  else
+    echo "❌ Unable to locate _shared-utils.md"
+    exit 1
+  fi
+fi
 set_shell_safety
 
-# Parse arguments
-DECISION_ID="${1:-}"
-ACTION=""
+ACTION="approve"
 COMMENT=""
+MODE="latest"
 
 for arg in "$@"; do
     case $arg in
         --action=*) ACTION="${arg#*=}" ;;
         --comment=*) COMMENT="${arg#*=}" ;;
+        --latest) MODE="latest" ;;
+        --list) MODE="list" ;;
     esac
 done
-
-# Validate required arguments
-if [[ -z "$DECISION_ID" ]] || [[ -z "$ACTION" ]]; then
-    echo "❌ Missing required arguments: decision-id and --action"
-    echo "Usage: /wtb:approve-decision dec-123 --action approve --comment 'Looks good'"
-    exit 1
-fi
 
 if [[ ! "$ACTION" =~ ^(approve|reject)$ ]]; then
     echo "❌ Invalid action. Use: approve or reject"
@@ -54,87 +62,89 @@ fi
 generate_report_header "WTB Decision Processor" "🏷️"
 
 echo "📋 Configuration:"
-echo "  🆔 Decision ID: $DECISION_ID"
+echo "  🧭 Mode: $MODE"
 echo "  ⚡ Action: $ACTION"
 echo "  💬 Comment: ${COMMENT:-'(none)'}"
 echo
 
-STATE_FILE=".claude/project-state.json"
-
-# Check if state file exists
-if [[ ! -f "$STATE_FILE" ]]; then
-    echo "❌ State file not found: $STATE_FILE"
-    echo "💡 Initialize project first: /wtb:init-project"
-    exit 1
+DECISIONS_FILE="docs/decisions.md"
+if [[ ! -f "$DECISIONS_FILE" ]]; then
+  echo "❌ Decisions log not found: $DECISIONS_FILE"
+  echo "💡 It will be created automatically when hooks log a decision."
+  exit 1
 fi
 
-# Process decision using Python for safe JSON handling
-python3 << PYTHON_SCRIPT
-import json
+python3 << 'PYTHON_SCRIPT'
+import re
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 
-state_file = "$STATE_FILE"
-decision_id = "$DECISION_ID"
-action = "$ACTION"
-comment = "$COMMENT"
+MODE = """%s"""
+ACTION = """%s"""
+COMMENT = """%s"""
+DECISIONS_FILE = "docs/decisions.md"
 
-try:
-    # Load current state
-    with open(state_file, 'r') as f:
-        state = json.load(f)
-    
-    # Find pending decision
-    pending = state.get('workflow', {}).get('pending_decisions', [])
-    decision_found = None
-    
-    for i, decision in enumerate(pending):
-        if decision.get('id') == decision_id:
-            decision_found = pending.pop(i)
-            break
-    
-    if not decision_found:
-        print(f"❌ Decision {decision_id} not found in pending decisions")
-        sys.exit(1)
-    
-    # Process decision
-    decision_found.update({
-        'status': action,
-        'processed_at': datetime.utcnow().isoformat() + 'Z',
-        'comment': comment,
-        'processed_by': 'wtb:approve-decision'
-    })
-    
-    # Move to completed decisions
-    if 'completed_decisions' not in state['workflow']:
-        state['workflow']['completed_decisions'] = []
-    
-    state['workflow']['completed_decisions'].append(decision_found)
-    
-    # Add to change log
-    if 'change_log' not in state:
-        state['change_log'] = []
-    
-    state['change_log'].append({
-        'timestamp': datetime.utcnow().isoformat() + 'Z',
-        'action': f'decision_{action}',
-        'decision_id': decision_id,
-        'comment': comment,
-        'changed_by': 'wtb:approve-decision'
-    })
-    
-    # Write updated state
-    with open(state_file, 'w') as f:
-        json.dump(state, f, indent=2)
-    
-    print(f"  ✅ Decision {decision_id} {action}d successfully")
-    print(f"  📝 Decision: {decision_found.get('title', 'N/A')}")
-    if comment:
-        print(f"  💬 Comment: {comment}")
-    
-except Exception as e:
-    print(f"❌ Failed to process decision: {e}")
-    sys.exit(1)
+with open(DECISIONS_FILE, 'r') as f:
+    lines = f.readlines()
+
+# Parse decision blocks starting with '## '
+blocks = []
+start = None
+for i, line in enumerate(lines):
+    if line.startswith('## '):
+        if start is not None:
+            blocks.append((start, i))
+        start = i
+if start is not None:
+    blocks.append((start, len(lines)))
+
+def status_of(block):
+    for l in lines[block[0]:block[1]]:
+        m = re.search(r"\*\*Status\*\*:\s*(\w+)", l)
+        if m:
+            return m.group(1).strip()
+    return None
+
+pending = [b for b in blocks if status_of(b) == 'Pending']
+
+if MODE == 'list':
+    if not pending:
+        print('✅ No pending decisions')
+        sys.exit(0)
+    print('📋 Pending decisions:')
+    for idx, (s, e) in enumerate(pending, 1):
+        header = lines[s].strip().lstrip('#').strip()
+        print(f"  {idx}. {header}")
+    sys.exit(0)
+
+if not pending:
+    print('✅ No pending decisions to process')
+    sys.exit(0)
+
+target = pending[-1]  # latest pending
+s, e = target
+
+# Update status line and add processed/comment lines after it if not present
+processed_ts = datetime.now(timezone.utc).isoformat(timespec='seconds').replace('+00:00','Z')
+new_chunk = []
+inserted_meta = False
+for l in lines[s:e]:
+    if not inserted_meta and re.search(r"\*\*Status\*\*:\s*Pending", l):
+        new_chunk.append(f"**Status**: {'Approved' if ACTION=='approve' else 'Rejected'}\n")
+        new_chunk.append(f"**Processed**: {processed_ts}\n")
+        if COMMENT:
+            new_chunk.append(f"**Comment**: {COMMENT}\n")
+        inserted_meta = True
+    else:
+        new_chunk.append(l)
+
+lines[s:e] = new_chunk
+
+with open(DECISIONS_FILE, 'w') as f:
+    f.writelines(lines)
+
+print(f"  ✅ Decision {('approved' if ACTION=='approve' else 'rejected')} successfully")
+print('  📝 Updated decisions log: docs/decisions.md')
 PYTHON_SCRIPT
 
 echo
@@ -142,7 +152,7 @@ echo "✅ WTB Decision Processing Complete!"
 echo
 echo "🔗 **Related Commands:**"
 echo "• /wtb:audit-project --scope decisions - Review all decisions"
-echo "• cat $STATE_FILE - View complete state"
+echo "• cat docs/decisions.md - View decisions log"
 echo "• /wtb:update-state - Modify project state"
 echo
 

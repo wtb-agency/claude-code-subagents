@@ -32,7 +32,20 @@ Safely modify project state values with validation and audit logging.
 
 ```bash
 #!/bin/bash
-source "$(dirname "$0")/_shared-utils.md"
+# Robust utility sourcing
+if [ -f .claude/slash-commands/_shared-utils.md ]; then
+  # shellcheck disable=SC1091
+  . .claude/slash-commands/_shared-utils.md
+else
+  SCRIPT_DIR=$(dirname "$0" 2>/dev/null || pwd)
+  if [ -f "$SCRIPT_DIR/_shared-utils.md" ]; then
+    # shellcheck disable=SC1091
+    . "$SCRIPT_DIR/_shared-utils.md"
+  else
+    echo "❌ Unable to locate _shared-utils.md"
+    exit 1
+  fi
+fi
 set_shell_safety
 
 # Parse arguments

@@ -54,7 +54,7 @@ Please review the decision log and approve/reject the roadmap update.
 - No requirements definition (belongs to product-requirements-manager)
 - No technical architecture (belongs to architecture agent)
 - No low-level tasks or timelines (belongs to low-level-project-manager)
-- No state edits (`.claude/state.json` requires `/update-state` command)
+- No state edits (`.claude/project-state.json` requires `/wtb:update-state` command)
 
 ---
 

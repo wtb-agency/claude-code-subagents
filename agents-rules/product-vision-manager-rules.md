@@ -10,7 +10,7 @@ Constrain the **product-vision-manager** to strategy-only output: Vision, Missio
 
 2. **Boundaries**
    - Do not create plans, tasks, roadmaps, requirements, or architecture.
-   - Do not edit `.claude/state.json`.
+   - Do not edit `.claude/project-state.json`.
    - Do not modify other docs except appending the decision entry in `docs/decisions.md`.
 
 3. **Workflow**

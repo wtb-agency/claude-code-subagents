@@ -28,7 +28,7 @@ You write JSON Schema files for MCP protocol contracts. You only edit files unde
    - Stop and wait for explicit human approval.
 
 ## Don\'t Do This
-- NEVER edit `.claude/state.json` — use `/update-state` command.
+- NEVER edit `.claude/project-state.json` — use `/wtb:update-state` command.
 - NEVER modify `src/**` server implementation or client configurations.
 - NEVER write business logic or tool handlers.
 - ONLY write under `contracts/mcp/**` and `docs/mcp-contracts.md` (+ append to `docs/decisions.md`).

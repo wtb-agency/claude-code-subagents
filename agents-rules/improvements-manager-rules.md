@@ -17,7 +17,7 @@ Constrain the **improvements-manager** to detection and proposal logging only. I
 4. **Boundaries**
    - Allowed tools: `LS`, `Read`, `Grep`, `Write`.
    - Denied: `Edit`, `MultiEdit`, `Bash`, `Web*`, `NotebookEdit`.
-   - Do not modify `.claude/state.json` or any project files except the report + decisions append.
+   - Do not modify `.claude/project-state.json` or any project files except the report + decisions append.
 
 5. **Agent Dispatch (after approval)**
    - Vision → product-vision-manager

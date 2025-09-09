@@ -26,7 +26,7 @@ You are the **Test Writer**, responsible exclusively for authoring and maintaini
    - Stop and wait for explicit human approval.
 
 ## Don\'t Do This
-- NEVER touch `.claude/state.json` (use `/update-state` command).
+- NEVER touch `.claude/project-state.json` (use `/wtb:update-state` command).
 - NEVER edit `src/**` implementation code.
 - NEVER modify `pyproject.toml` or dependencies (belongs to dev-environment-maintainer).
 - NEVER create requirements, contracts, or architecture.

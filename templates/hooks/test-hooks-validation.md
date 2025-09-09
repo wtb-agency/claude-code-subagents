@@ -11,8 +11,8 @@ This document describes how to test that the hooks work correctly with user-init
 
 ```bash
 # These should trigger permission requests:
-# - Edit .claude/state.json
-# - Edit .claude/slash-commands/init-project.md  
+# - Edit .claude/project-state.json
+# - Edit .claude/slash-commands/wtb-init-project.md  
 # - Edit .claude/hooks/boundary-enforcement.json
 # - Edit agents-rules/consistency-auditor-rules.md
 # - Edit AGENTS.md
@@ -39,7 +39,7 @@ This document describes how to test that the hooks work correctly with user-init
 # - Edit src/main.py → Creates "Code Update" pending decision
 
 # These should NOT create pending decisions:
-# - Edit .claude/state.json (system file)
+# - Edit .claude/project-state.json (system file)
 # - Edit agents-rules/test-rules.md (system file)
 # - Edit AGENTS.md (system file)
 ```
@@ -53,8 +53,8 @@ This document describes how to test that the hooks work correctly with user-init
 # After any file edit that creates a pending decision:
 # Should see message like:
 # "⏳ 1 pending decision(s) require approval"  
-# "   Use /approve-decision to review and approve"
-# "   Use /approve-decision --list to see all pending decisions"
+# "   Use /wtb:approve-decision --latest to approve the newest"
+# "   Or run /wtb:approve-decision --list to see all pending decisions"
 ```
 
 ## Validation Checklist
@@ -70,7 +70,7 @@ This document describes how to test that the hooks work correctly with user-init
 
 **Key Insight**: Hooks trigger on **tool use**, not on **who initiates the tool use**.
 
-✅ **Works with user-initiated commands**: When user runs `/init-project`, any Edit tools triggered will activate hooks
+✅ **Works with user-initiated commands**: When user runs `/wtb:init-project`, any Edit tools triggered will activate hooks
 ✅ **Works with agent-dispatched tools**: When agent uses Edit tool, hooks activate regardless of dispatch method  
 ✅ **File-based logic**: Hooks now use file patterns instead of trying to detect active agents
 ✅ **Reliable protection**: System files are protected, decision logging happens automatically

@@ -13,7 +13,7 @@ Keep the **product-requirements-manager** strictly within functional requirement
 2. **File Ownership**
    - May overwrite: `docs/requirements.md`.
    - May append: `docs/decisions.md` (status = Pending until human approval).
-   - Must never touch: `.claude/state.json`, `docs/vision.md`, `docs/plan.md`, `docs/backlog.md`, `README.md`.
+   - Must never touch: `.claude/project-state.json`, `docs/vision.md`, `docs/plan.md`, `docs/backlog.md`, `README.md`.
 
 3. **Workflow**
    - Capture or refine requirements based on provided inputs.

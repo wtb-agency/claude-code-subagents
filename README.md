@@ -1,21 +1,26 @@
 # Claude Code Subagent Library
 
+Primary scope: This library is designed to develop Claude Desktop extensions built as MCP Bundles (MCPB). It also supports adjacent workflows like MCP server development and general Python projects.
+
 A library of 21 specialized agents for Claude Code's Task tool, plus a bootstrap system to create focused customer projects. Features **8 optimized WTB slash commands** for MCP/MCPB development workflows alongside native Claude Code orchestration.
 
 > **🏷️ WTB Namespace**: All commands use `/wtb:` prefixes for namespace management and ownership signaling.
 
 ## Overview
 
-This library provides **21 specialized agents** and a **project bootstrap system** for different aspects of software development:
+This library provides **21 specialized agents** and a **project bootstrap system** for building Claude Desktop extensions via MCP Bundles (primary), with additional support for MCP servers and general code projects:
 
 - **Native Orchestration**: 8 optimized WTB slash commands and hooks for MCP/MCPB workflows
 - **Strategy & Planning**: Vision, requirements, and roadmap management  
 - **Technical Implementation**: Contracts, code, tests, and environment setup
 - **MCP Server Development**: Protocol compliance, server implementation, tools, resources, client integration, and testing
-- **MCP Bundle Development**: MCP Bundle manifests, configuration, implementation, dependency bundling, packaging, and installation testing
+- **MCP Bundle Development (Claude Desktop extensions)**: MCP Bundle manifests, configuration, implementation, dependency bundling, packaging, and installation testing
 - **Quality & Documentation**: Consistency auditing and documentation maintenance
 
 Agents get copied to customer projects where they work within file ownership boundaries and approval workflows.
+
+### Terminology
+- "Claude Desktop extension" → implemented as an MCP Bundle packaged as `.mcpb`
 
 ## How the Bootstrap System Works
 
@@ -27,7 +32,7 @@ Agents get copied to customer projects where they work within file ownership bou
 5. **Documentation**: Generates project-specific README.md with usage instructions
 
 ### Agent Selection Examples
-- **MCP Bundle**: Copies MCP Bundle agents + 1 MCPB pipeline command + hooks (3 agents)
+- **Claude Desktop Extension (MCP Bundle)**: Copies MCP Bundle agents + 1 MCPB pipeline command + hooks (3 agents)
 - **MCP Server**: Copies MCP agents + 4 MCP commands + hooks (6 agents) 
 - **Data Pipeline**: Copies code/test agents + 4 orchestration commands + hooks (4 agents)
 - **Full Project**: Copies planning + implementation agents + all 8 optimized commands + hooks (10+ agents)
@@ -36,7 +41,7 @@ Agents get copied to customer projects where they work within file ownership bou
 Each customer project gets:
 - Selected agents copied to `.claude/agents/`
 - Corresponding rules copied to `agents-rules/`
-- **8 optimized WTB slash commands** copied to `.claude/slash-commands/`
+- **8 optimized WTB slash commands** copied to `.claude/slash-commands/` (with special focus on MCPB workflows for Claude Desktop)
 - Boundary enforcement hooks configuration
 - `AGENTS.md` coordination framework
 - Project-specific README.md with usage examples
@@ -67,7 +72,7 @@ Each customer project gets:
 - **`mcp-client-integration-manager`**: Client configurations and integration guides
 - **`mcp-test-engineer`**: MCP-specific testing and protocol validation
 
-### MCP Bundle Development
+### MCP Bundle Development (Claude Desktop extensions)
 - **`mcpb-extension-manager`**: Implement MCP server code for bundles (server/ directory only)
 - **`mcpb-manifest-builder`**: Create and manage manifest.json files with user configuration  
 - **`mcpb-packager`**: Package bundles into .mcpb files using official MCPB CLI tools

@@ -51,7 +51,7 @@ my-extension/
 - `mcpb pack` - Create .mcpb package (handled by mcpb-packager)
 
 ## Don\'t Do This
-- NEVER edit `.claude/state.json` (use `/update-state` command)
+- NEVER edit `.claude/project-state.json` (use `/wtb:update-state` command)
 - NEVER create or modify manifest.json files (belongs to mcpb-manifest-builder)
 - NEVER handle packaging operations (belongs to mcpb-packager)
 - NEVER create complex multi-bundle monorepo structures

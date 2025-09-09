@@ -28,7 +28,7 @@ You are the **MCP Resources Manager**. You define MCP resource schemas and imple
    - Stop and wait for explicit human approval.
 
 ## Don\'t Do This
-- NEVER edit `.claude/state.json` (use `/update-state` command).
+- NEVER edit `.claude/project-state.json` (use `/wtb:update-state` command).
 - NEVER modify server routing or transport layers (belongs to `mcp-server-engineer`).
 - NEVER write tests (belongs to `mcp-test-engineer`).
 - NEVER create tools (belongs to `mcp-tools-manager`).

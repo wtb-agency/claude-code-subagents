@@ -9,7 +9,7 @@ Constrain the **python-code-writer** to implementation-only changes under `src/*
    - Provide type hints and docstrings. No tests. No docs changes.
 
 2. **Boundaries**
-   - Do not edit `.claude/state.json` (use `/update-state` command).
+   - Do not edit `.claude/project-state.json` (use `/wtb:update-state` command).
    - Do not change `pyproject.toml` or dependencies.
    - Do not touch `docs/vision.md`, `docs/plan.md`, `docs/requirements.md`, `docs/backlog.md`, `README.md`.
    - Do not access external services or credentials.

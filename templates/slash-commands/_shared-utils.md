@@ -1,6 +1,6 @@
 # Shared Utility Functions for Slash Commands
 # This file contains common patterns extracted from multiple commands
-# Include this in commands using: !source .claude/slash-commands/_shared-utils.md
+# Include this in commands using: source .claude/slash-commands/_shared-utils.md
 
 # Cross-platform compatibility
 detect_os() {
@@ -47,7 +47,7 @@ detect_project_type() {
     local PROJECT_TYPE="general"
     
     if [ -f "manifest.json" ] && (grep -q '"type".*:.*"python"' manifest.json 2>/dev/null || grep -q '"type".*:.*"node"' manifest.json 2>/dev/null); then
-        PROJECT_TYPE="dxt"
+        PROJECT_TYPE="mcpb"
     elif [ -f "server.py" ] || [ -f "server/main.py" ] || [ -f "src/main.py" ]; then
         PROJECT_TYPE="mcp" 
     elif [ -f "pyproject.toml" ]; then
@@ -65,7 +65,7 @@ generate_report_header() {
     local emoji="$2"
     
     echo "$emoji $title"
-    echo "$(printf '=%.0s' {1..${#title}})"
+    printf '%*s\n' "${#title}" '' | tr ' ' '='
     echo ""
 }
 
@@ -74,12 +74,17 @@ find_implementation_files() {
     local file_types="$1"  # e.g., "py js ts"
     local max_files="${2:-50}"
     
-    local find_args=""
+    # Build OR expression for find
+    local expr=""
     for ext in $file_types; do
-        find_args="$find_args -name \"*.$ext\""
+        if [ -n "$expr" ]; then
+            expr="$expr -o -name '*.$ext'"
+        else
+            expr="-name '*.$ext'"
+        fi
     done
-    
-    eval "find . $find_args -not -path './.*' -not -path './node_modules/*' -not -path './venv/*'" | head -n "$max_files"
+    # shellcheck disable=SC2086
+    find . \( $expr \) -not -path './.*' -not -path './node_modules/*' -not -path './venv/*' 2>/dev/null | head -n "$max_files"
 }
 
 # Find tool definition files  

@@ -10,7 +10,7 @@ Constrain the **dev-environment-maintainer** to dependency and environment confi
    - Append changes as pending decisions in `docs/decisions.md`.
 
 2. **Boundaries**
-   - Do not edit `.claude/state.json` (use `/update-state` command).
+   - Do not edit `.claude/project-state.json` (use `/wtb:update-state` command).
    - Do not modify `src/**` (belongs to python-code-writer).
    - Do not change docs outside `docs/development.md` and `docs/decisions.md`.
 

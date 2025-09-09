@@ -39,7 +39,7 @@ Please review and approve or reject.
   - Code changes → `python-code-writer`
   - Tests → `test-writer`
   - Docs formatting → `documentation-maintainer`
-  - State updates → Use `/update-state` slash command
+  - State updates → Use `/wtb:update-state` slash command
 
 ---
 

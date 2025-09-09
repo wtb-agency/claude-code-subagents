@@ -10,7 +10,7 @@ Constrain the **test-writer** to automated test creation and maintenance under `
    - Validate only against approved contracts/specs.
 
 2. **Boundaries**
-   - Do not edit `.claude/state.json`.
+   - Do not edit `.claude/project-state.json`.
    - Do not modify `src/**` code.
    - Do not touch `pyproject.toml` or dependencies.
    - Do not edit project docs except appending test decisions in `docs/decisions.md`.

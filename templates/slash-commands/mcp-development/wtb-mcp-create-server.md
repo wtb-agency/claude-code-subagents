@@ -29,3 +29,12 @@ One-shot MCP server creation orchestrator - scaffold, implement, validate, test 
 ---
 
 *Full implementation available - use Task tool to delegate to mcp-server-engineer for complex server logic*
+
+```bash
+#!/bin/bash
+echo "This command is an orchestrator spec."
+echo "Use Claude Code Task to dispatch:"
+echo "  - Agent: mcp-server-engineer (implement server)"
+echo "  - Agent: mcp-tools-manager (add tools)"
+echo "  - Agent: mcp-resources-manager (add resources)"
+```

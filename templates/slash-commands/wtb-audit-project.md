@@ -32,7 +32,20 @@ Run comprehensive consistency checks across project files and state.
 
 ```bash
 #!/bin/bash
-source "$(dirname "$0")/_shared-utils.md"
+# Robust utility sourcing
+if [ -f .claude/slash-commands/_shared-utils.md ]; then
+  # shellcheck disable=SC1091
+  . .claude/slash-commands/_shared-utils.md
+else
+  SCRIPT_DIR=$(dirname "$0" 2>/dev/null || pwd)
+  if [ -f "$SCRIPT_DIR/_shared-utils.md" ]; then
+    # shellcheck disable=SC1091
+    . "$SCRIPT_DIR/_shared-utils.md"
+  else
+    echo "❌ Unable to locate _shared-utils.md"
+    exit 1
+  fi
+fi
 set_shell_safety
 
 # Parse arguments
@@ -132,34 +145,19 @@ fi
 if [[ "$SCOPE" == "all" ]] || [[ "$SCOPE" == "decisions" ]]; then
     echo "⚖️ Auditing Decision Workflow..."
     
-    if [ -f ".claude/project-state.json" ]; then
-        PENDING_COUNT=$(python3 -c "
-import json
-try:
-    state = json.load(open('.claude/project-state.json'))
-    pending = state.get('workflow', {}).get('pending_decisions', [])
-    print(len(pending))
-except:
-    print(0)
-" 2>/dev/null)
-        
-        COMPLETED_COUNT=$(python3 -c "
-import json
-try:
-    state = json.load(open('.claude/project-state.json'))
-    completed = state.get('workflow', {}).get('completed_decisions', [])
-    print(len(completed))
-except:
-    print(0)
-" 2>/dev/null)
-        
+    if [ -f "docs/decisions.md" ]; then
+        PENDING_COUNT=$(grep -c "Status.*: Pending" docs/decisions.md 2>/dev/null || echo 0)
+        COMPLETED_COUNT=$(grep -E -c "Status.*: (Approved|Rejected)" docs/decisions.md 2>/dev/null || echo 0)
+
         echo "  📋 Pending decisions: $PENDING_COUNT"
         echo "  ✅ Completed decisions: $COMPLETED_COUNT"
-        
+
         if [ "$PENDING_COUNT" -gt 10 ]; then
             echo "  ⚠️ Warning: Many pending decisions ($PENDING_COUNT)"
             AUDIT_WARNINGS=$((AUDIT_WARNINGS + 1))
         fi
+    else
+        echo "  ℹ️ No decisions log found"
     fi
     
     echo

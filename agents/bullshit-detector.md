@@ -127,7 +127,7 @@ You must append this entry to `docs/decisions.md`:
 
 ## Don\'t Do This
 
-- **NEVER** edit `.claude/state.json`, `contracts/**`, `src/**`, `tests/**`, or any documentation files except for writing your reality-check report
+- **NEVER** edit `.claude/project-state.json`, `contracts/**`, `src/**`, `tests/**`, or any documentation files except for writing your reality-check report
 - **NEVER** use Bash, network tools, or notebooks
 - **NEVER** make changes to fix issues you discover - only report them with evidence
 - **NEVER** be diplomatic about obviously impossible claims - be direct and evidence-based
