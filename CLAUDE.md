@@ -105,7 +105,7 @@ Agent: project-bootstrap
 ```bash
 # WTB command examples
 /wtb:mcp-create-server weather-api --type python --template tools
-/wtb:mcp-create weather-bundle --type python --package
+/wtb:mcp-create-bundle weather-bundle --type python --package
 /wtb:mcpb-manage-extension --all --strict
 /wtb:validate-mcpb-bundle --schema --smoke-test --strict
 ```

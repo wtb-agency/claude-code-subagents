@@ -125,7 +125,7 @@ After bootstrapping, use **WTB commands** for collision-free development:
 /wtb:mcp-create-server weather-api --type python --template tools
 
 # One-shot MCP Bundle creation
-/wtb:mcp-create weather-bundle --type python --package
+/wtb:mcp-create-bundle weather-bundle --type python --package
 
 # Complete MCPB development pipeline
 /wtb:mcpb-manage-extension --all --strict
@@ -152,7 +152,7 @@ Focused WTB command interface using `/wtb:` namespace for collision-free operati
 
 ### MCP Development (4 commands)
 - **`/wtb:mcp-create-server`**: One-shot MCP server creator - scaffold, implement, validate, test
-- **`/wtb:mcp-create`**: One-shot MCP Bundle creator - scaffold, implement, validate, package
+- **`/wtb:mcp-create-bundle`**: One-shot MCP Bundle creator - scaffold, implement, validate, package
 - **`/wtb:mcpb-manage-extension`**: Complete MCPB pipeline - validate, bundle, package, test
 - **`/wtb:validate-mcpb-bundle`**: Comprehensive MCPB validation - schema + smoke tests
 
@@ -182,9 +182,10 @@ claude-code-subagents/                  # This repository
 │   │   ├── wtb-audit-project.md       # Project auditing
 │   │   ├── mcp-development/           # MCP server commands
 │   │   │   ├── wtb-mcp-create-server.md     # One-shot server creator
-│   │   │   └── wtb-mcp-create.md            # One-shot bundle creator
+│   │   │   
 │   │   ├── mcpb-development/          # MCPB pipeline command
-│   │   │   └── wtb-mcpb-manage-extension.md # Complete MCPB pipeline
+│   │   │   ├── wtb-mcpb-manage-extension.md # Complete MCPB pipeline
+│   │   │   └── wtb-mcp-create-bundle.md     # One-shot bundle creator
 │   │   └── quality-compliance/        # Validation commands
 │   │       └── wtb-validate-mcpb-bundle.md  # Bundle validation
 │   └── hooks/                         # Workflow automation

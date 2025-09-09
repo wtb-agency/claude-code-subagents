@@ -6,7 +6,7 @@ allowed-tools: [Task, Read, Write, Bash, Glob]
 
 One-shot MCP Bundle creation orchestrator - scaffold, implement, validate, package in single pipeline.
 
-**Usage**: `/wtb:mcp-create [bundle-name] [--type python|node|binary] [--template basic|tools|resources] [--package]`
+**Usage**: `/wtb:mcp-create-bundle [bundle-name] [--type python|node|binary] [--template basic|tools|resources] [--package]`
 
 **Core Parameters:**
 - `bundle-name`: Name for the new MCP Bundle
