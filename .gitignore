@@ -61,6 +61,13 @@ Thumbs.db
 *.log
 logs/
 
+# Claude Code / WTB runtime artifacts (when commands are run in this repo)
+.claude/project-state.json
+docs/decisions.md
+docs/consistency-report.md
+docs/audit-report-*.md
+*.mcpb
+
 # Data files (project-specific)
 /data/raw/
 /data/interim/
@@ -94,4 +101,3 @@ coverage.xml
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
